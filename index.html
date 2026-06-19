@@ -271,22 +271,28 @@
         margin-top: 24px;
         padding: 12px 24px;
 
-        border: none;
+        border: 1px solid #30363d;
         border-radius: 8px;
 
-        background: #2b2c2c;
+        background: #161b22;
+        color: #56d364;
 
-        color: white;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
 
-        font-size: 16px;
         cursor: pointer;
-
-        transition: 0.2s;
+        transition: all 0.2s ease;
       }
 
       .music-btn:hover {
-        background: #2b2c2c;
-        transform: translateY(-2px);
+        background: #21262d;
+        border-color: #56d364;
+        box-shadow: 0 0 15px rgba(86, 211, 100, 0.3);
+      }
+
+      .music-btn:disabled {
+        opacity: 0.7;
+        cursor: default;
       }
       .footer {
         opacity: 0;
@@ -456,7 +462,6 @@
       }
 
       setTimeout(nextLine, 500);
-      const audio = document.getElementById("bgMusic");
       let isPlaying = false;
       function showFinalCard() {
         const card = document.createElement("div");
@@ -464,30 +469,30 @@
         card.className = "final-card";
 
         card.innerHTML = `
-  <div class="emoji">☕</div>
+              <div class="emoji">☕</div>
+              <p>
+                Kahveden hatır,<br>
+                her insandan hayır beklenmez.
+              </p>
+              <h1>Hayırlı Cumalar 🤲</h1>
 
-  <p>
-    Kahveden hatır,<br>
-    her insandan hayır beklenmez.
-  </p>
-
-  <h1>Hayırlı Cumalar 🤲</h1>
-
- <button id="playMusic" class="music-btn">
-    🎵 Müziği Başlat
-  </button>
-`;
+            <button id="playMusic" class="music-btn">
+               🎵 Müziği Başlat
+            </button>
+            `;
 
         document.body.appendChild(card);
 
         document.getElementById("playMusic").addEventListener("click", () => {
+          const audio = document.getElementById("bgMusic");
+
           audio.play();
 
-          document.getElementById("playMusic").remove();
-        });
+          const btn = document.getElementById("playMusic");
 
-        audio.play().catch(() => {
-          console.log("Tarayıcı kullanıcı etkileşimi bekliyor.");
+          btn.innerHTML = "🎵 Çalıyor...";
+
+          btn.disabled = true;
         });
       }
     </script>
