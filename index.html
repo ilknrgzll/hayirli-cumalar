@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hayırlı Cumalar</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #050b14;
+        color: #3fb950;
+        font-family: "Fira Code", monospace;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(63, 185, 80, 0.08) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(63, 185, 80, 0.08) 1px, transparent 1px);
+        background-size: 40px 40px;
+        animation: moveGrid 8s linear infinite;
+        z-index: 0;
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(
+          circle at center,
+          rgba(63, 185, 80, 0.08),
+          transparent 70%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      @keyframes moveGrid {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(40px);
+        }
+      }
+      .terminal {
+        width: 100%;
+        max-width: 800px;
+        position: relative;
+        z-index: 10;
+        background: rgba(22, 27, 34, 0.88);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.45),
+          0 0 30px rgba(63, 185, 80, 0.08);
+        animation: terminalOpen 0.8s ease;
+      }
+      .header {
+        background: #21262d;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid #30363d;
+      }
+      .badge {
+        margin-left: auto;
+        font-size: 11px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(31, 111, 235, 0.15);
+        color: #58a6ff;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .red {
+        background: #ff5f57;
+      }
+      .yellow {
+        background: #febc2e;
+      }
+      .green {
+        background: #28c840;
+      }
+
+      .title {
+        margin-left: 10px;
+        color: #aeb6c2;
+        font-size: 14px;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 2px solid #3fb950;
+        animation:
+          typing 2s steps(20),
+          blink 1s infinite;
+      }
+
+      @keyframes typing {
+        from {
+          width: 0;
+        }
+        to {
+          width: 140px;
+        }
+      }
+
+      .content {
+        line-height: 1.6;
+        padding: 24px 28px;
+        font-size: 18px;
+        white-space: pre-wrap;
+      }
+
+      .line {
+        min-height: 34px;
+      }
+
+      .cursor-line {
+        min-height: 34px;
+      }
+
+      .cursor {
+        color: #56d364;
+        font-size: 22px;
+        font-weight: bold;
+        animation: blink 0.8s infinite;
+      }
+
+      .success {
+        color: #56d364;
+        font-weight: bold;
+        text-shadow: 0 0 10px rgba(86, 211, 100, 0.5);
+        animation: pulseGlow 2s infinite;
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          transform: scale(1);
+          text-shadow: 0 0 10px rgba(86, 211, 100, 0.3);
+        }
+
+        50% {
+          transform: scale(1.03);
+          text-shadow:
+            0 0 20px rgba(86, 211, 100, 0.8),
+            0 0 40px rgba(86, 211, 100, 0.4);
+        }
+
+        100% {
+          transform: scale(1);
+          text-shadow: 0 0 10px rgba(86, 211, 100, 0.3);
+        }
+      }
+
+      .highlight {
+        color: #f2cc60;
+      }
+
+      @keyframes show {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      .diff-add {
+        color: #56d364;
+      }
+
+      .diff-remove {
+        color: #f85149;
+      }
+
+      .command {
+        color: #58a6ff;
+      }
+
+      .progress {
+        width: 100%;
+        height: 14px;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #30363d;
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+
+      .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg, #238636, #56d364);
+      }
+
+      .final-card {
+        position: fixed;
+        inset: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        background: rgba(5, 11, 20, 0.94);
+        backdrop-filter: blur(10px);
+
+        z-index: 999;
+
+        animation: fadeFinal 0.8s ease;
+      }
+
+      .final-card .emoji {
+        font-size: 72px;
+        margin-bottom: 20px;
+      }
+
+      .final-card h1 {
+        color: white;
+        margin-bottom: 12px;
+      }
+
+      .final-card p {
+        color: #aeb6c2;
+        text-align: center;
+        line-height: 1.8;
+      }
+
+      @keyframes fadeFinal {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .music-btn {
+        margin-top: 24px;
+        padding: 12px 24px;
+
+        border: none;
+        border-radius: 8px;
+
+        background: #2b2c2c;
+
+        color: white;
+
+        font-size: 16px;
+        cursor: pointer;
+
+        transition: 0.2s;
+      }
+
+      .music-btn:hover {
+        background: #2b2c2c;
+        transform: translateY(-2px);
+      }
+      .footer {
+        opacity: 0;
+        transition: all 1s ease;
+        border-top: 1px solid #30363d;
+        padding: 16px;
+        text-align: center;
+        color: #8b949e;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="terminal">
+      <div class="header">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+        <div class="title">expectations.txt</div>
+        <div class="badge">FRIDAY BUILD</div>
+      </div>
+
+      <div class="content" id="terminal"></div>
+
+      <div class="footer">git commit -m "Hayırlı Cumalar"</div>
+    </div>
+
+    <script>
+      const lines = [
+        "$ git status",
+        "",
+        "On branch friday",
+        "",
+        "Modified:",
+        "  expectations.txt",
+        "",
+        "Changes:",
+        // "- Kırgınlık",
+        // "- Fazla beklenti",
+        "+ Kahveden hatır ☕",
+        "+ Her insandan hayır beklenmez 🙂",
+        "",
+        "No conflicts with reality.",
+        "",
+        "$ git push origin friday",
+      ];
+
+      const terminal = document.getElementById("terminal");
+
+      let lineIndex = 0;
+
+      function typeLine(text, callback) {
+        const div = document.createElement("div");
+
+        div.className = "line";
+
+        if (text.startsWith("+")) {
+          div.classList.add("diff-add");
+        }
+
+        if (text.startsWith("-")) {
+          div.classList.add("diff-remove");
+        }
+
+        if (text.startsWith("$")) {
+          div.classList.add("command");
+        }
+
+        if (text.includes("expectations.txt")) {
+          div.style.color = "#58a6ff";
+        }
+
+        if (text.includes("Kahveden")) {
+          div.classList.add("highlight");
+        }
+
+        terminal.appendChild(div);
+
+        let charIndex = 0;
+
+        const interval = setInterval(() => {
+          if (charIndex < text.length) {
+            div.textContent += text.charAt(charIndex);
+
+            charIndex++;
+          } else {
+            clearInterval(interval);
+
+            callback();
+          }
+        }, 25);
+      }
+
+      function playDeploy(callback) {
+        const deployLines = [
+          "Opening expectations.txt...",
+          "Reviewing changes...",
+          "Accepting reality...",
+          "Creating friday release...",
+        ];
+        let deployIndex = 0;
+
+        function nextDeployLine() {
+          if (deployIndex >= deployLines.length) {
+            const progress = document.createElement("div");
+
+            progress.className = "progress";
+
+            progress.innerHTML = '<div class="progress-bar"></div>';
+
+            terminal.appendChild(progress);
+
+            const bar = progress.querySelector(".progress-bar");
+
+            let width = 0;
+
+            const interval = setInterval(() => {
+              width += 2;
+
+              bar.style.width = width + "%";
+
+              if (width >= 100) {
+                clearInterval(interval);
+
+                const success = document.createElement("div");
+
+                success.className = "line success";
+
+                success.textContent = "✔ Deploy successful";
+
+                terminal.appendChild(success);
+
+                setTimeout(callback, 1200);
+              }
+            }, 30);
+
+            return;
+          }
+
+          typeLine(deployLines[deployIndex], () => {
+            deployIndex++;
+
+            nextDeployLine();
+          });
+        }
+
+        nextDeployLine();
+      }
+
+      function nextLine() {
+        if (lineIndex >= lines.length) {
+          playDeploy(() => {
+            document.querySelector(".footer").style.opacity = "1";
+
+            setTimeout(() => {
+              showFinalCard();
+            }, 1500);
+          });
+
+          return;
+        }
+
+        typeLine(lines[lineIndex], () => {
+          lineIndex++;
+
+          setTimeout(nextLine, 180);
+        });
+      }
+
+      setTimeout(nextLine, 500);
+      const audio = document.getElementById("bgMusic");
+      let isPlaying = false;
+      function showFinalCard() {
+        const card = document.createElement("div");
+
+        card.className = "final-card";
+
+        card.innerHTML = `
+  <div class="emoji">☕</div>
+
+  <p>
+    Kahveden hatır,<br>
+    her insandan hayır beklenmez.
+  </p>
+
+  <h1>Hayırlı Cumalar 🤲</h1>
+
+ <button id="playMusic" class="music-btn">
+    🎵 Müziği Başlat
+  </button>
+`;
+
+        document.body.appendChild(card);
+
+        document.getElementById("playMusic").addEventListener("click", () => {
+          audio.play();
+
+          document.getElementById("playMusic").remove();
+        });
+
+        audio.play().catch(() => {
+          console.log("Tarayıcı kullanıcı etkileşimi bekliyor.");
+        });
+      }
+    </script>
+    <audio id="bgMusic" loop>
+      <source src="geylani.mp3" type="audio/mpeg" />
+    </audio>
+  </body>
+</html>
