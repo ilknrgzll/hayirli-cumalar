@@ -302,6 +302,87 @@
         text-align: center;
         color: #8b949e;
       }
+
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+          overflow-y: auto;
+          padding: 12px;
+        }
+
+        .terminal {
+          width: 100%;
+          border-radius: 10px;
+        }
+
+        .content {
+          font-size: 15px;
+          padding: 16px;
+        }
+
+        .header {
+          padding: 10px 14px;
+        }
+
+        .title {
+          animation: none;
+          width: auto;
+          border-right: none;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          font-size: 13px;
+        }
+
+        .badge {
+          display: none;
+        }
+
+        .final-card .emoji {
+          font-size: 48px;
+        }
+
+        .final-card h1 {
+          font-size: 24px;
+          text-align: center;
+        }
+
+        .final-card p {
+          font-size: 16px;
+          padding: 0 20px;
+        }
+
+        .music-btn {
+          width: 90%;
+          max-width: 280px;
+          font-size: 15px;
+        }
+      }
+      .github-credit {
+        margin-top: 20px;
+        color: #8b949e;
+        text-decoration: none;
+        font-size: 13px;
+        opacity: 0.7;
+        transition: 0.3s;
+      }
+
+      .github-credit:hover {
+        color: #56d364;
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .github-credit {
+          font-size: 12px;
+          bottom: 12px;
+        }
+
+        .github-credit svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -469,17 +550,25 @@
         card.className = "final-card";
 
         card.innerHTML = `
-              <div class="emoji">☕</div>
-              <p>
-                Kahveden hatır,<br>
-                her insandan hayır beklenmez.
-              </p>
-              <h1>Hayırlı Cumalar 🤲</h1>
+    <div class="emoji">☕</div>
 
-            <button id="playMusic" class="music-btn">
-               🎵 Müziği Başlat
-            </button>
-            `;
+    <p>
+      KAHVEDEN HATIR,<br>
+      HER İNSANDAN HAYIR BEKLENMEZ.
+    </p>
+
+    <h1>Hayırlı Cumalar 🤲</h1>
+
+    <button id="playMusic" class="music-btn">
+        🎵 Müziği Başlat
+    </button>
+
+    <a class="github-credit"
+       href="https://github.com/ilknrgzll"
+       target="_blank">
+       Developed by @ilknrgzll
+    </a>
+`;
 
         document.body.appendChild(card);
 
