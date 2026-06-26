@@ -62,6 +62,7 @@
           transform: translateY(40px);
         }
       }
+
       .terminal {
         width: 100%;
         max-width: 800px;
@@ -75,8 +76,8 @@
         box-shadow:
           0 20px 50px rgba(0, 0, 0, 0.45),
           0 0 30px rgba(63, 185, 80, 0.08);
-        animation: terminalOpen 0.8s ease;
       }
+
       .header {
         background: #21262d;
         padding: 12px 18px;
@@ -85,6 +86,7 @@
         gap: 8px;
         border-bottom: 1px solid #30363d;
       }
+
       .badge {
         margin-left: auto;
         font-size: 11px;
@@ -93,6 +95,7 @@
         background: rgba(31, 111, 235, 0.15);
         color: #58a6ff;
       }
+
       .dot {
         width: 12px;
         height: 12px;
@@ -141,21 +144,9 @@
         min-height: 34px;
       }
 
-      .cursor-line {
-        min-height: 34px;
-      }
-
-      .cursor {
-        color: #56d364;
-        font-size: 22px;
-        font-weight: bold;
-        animation: blink 0.8s infinite;
-      }
-
       .success {
         color: #56d364;
         font-weight: bold;
-        text-shadow: 0 0 10px rgba(86, 211, 100, 0.5);
         animation: pulseGlow 2s infinite;
       }
 
@@ -164,14 +155,12 @@
           transform: scale(1);
           text-shadow: 0 0 10px rgba(86, 211, 100, 0.3);
         }
-
         50% {
           transform: scale(1.03);
           text-shadow:
             0 0 20px rgba(86, 211, 100, 0.8),
             0 0 40px rgba(86, 211, 100, 0.4);
         }
-
         100% {
           transform: scale(1);
           text-shadow: 0 0 10px rgba(86, 211, 100, 0.3);
@@ -182,30 +171,18 @@
         color: #f2cc60;
       }
 
-      @keyframes show {
-        from {
-          opacity: 0;
-          transform: translateY(4px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
       @keyframes blink {
         50% {
           opacity: 0;
         }
       }
+
       .diff-add {
         color: #56d364;
       }
-
       .diff-remove {
         color: #f85149;
       }
-
       .command {
         color: #58a6ff;
       }
@@ -229,17 +206,13 @@
       .final-card {
         position: fixed;
         inset: 0;
-
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-
         background: rgba(5, 11, 20, 0.94);
         backdrop-filter: blur(10px);
-
         z-index: 999;
-
         animation: fadeFinal 0.8s ease;
       }
 
@@ -267,19 +240,16 @@
           opacity: 1;
         }
       }
+
       .music-btn {
         margin-top: 24px;
         padding: 12px 24px;
-
         border: 1px solid #30363d;
         border-radius: 8px;
-
         background: #161b22;
         color: #56d364;
-
         font-family: "Fira Code", monospace;
         font-size: 14px;
-
         cursor: pointer;
         transition: all 0.2s ease;
       }
@@ -294,6 +264,7 @@
         opacity: 0.7;
         cursor: default;
       }
+
       .footer {
         opacity: 0;
         transition: all 1s ease;
@@ -311,7 +282,6 @@
         }
 
         .terminal {
-          width: 100%;
           border-radius: 10px;
         }
 
@@ -357,7 +327,12 @@
           max-width: 280px;
           font-size: 15px;
         }
+
+        .github-credit {
+          font-size: 12px;
+        }
       }
+
       .github-credit {
         margin-top: 20px;
         color: #8b949e;
@@ -370,18 +345,6 @@
       .github-credit:hover {
         color: #56d364;
         opacity: 1;
-      }
-
-      @media (max-width: 768px) {
-        .github-credit {
-          font-size: 12px;
-          bottom: 12px;
-        }
-
-        .github-credit svg {
-          width: 16px;
-          height: 16px;
-        }
       }
     </style>
   </head>
@@ -410,8 +373,6 @@
         "  expectations.txt",
         "",
         "Changes:",
-        // "- Kırgınlık",
-        // "- Fazla beklenti",
         "+ Kahveden hatır ☕",
         "+ Her insandan hayır beklenmez 🙂",
         "",
@@ -421,46 +382,26 @@
       ];
 
       const terminal = document.getElementById("terminal");
-
       let lineIndex = 0;
 
       function typeLine(text, callback) {
         const div = document.createElement("div");
-
         div.className = "line";
 
-        if (text.startsWith("+")) {
-          div.classList.add("diff-add");
-        }
-
-        if (text.startsWith("-")) {
-          div.classList.add("diff-remove");
-        }
-
-        if (text.startsWith("$")) {
-          div.classList.add("command");
-        }
-
-        if (text.includes("expectations.txt")) {
-          div.style.color = "#58a6ff";
-        }
-
-        if (text.includes("Kahveden")) {
-          div.classList.add("highlight");
-        }
+        if (text.startsWith("+")) div.classList.add("diff-add");
+        if (text.startsWith("-")) div.classList.add("diff-remove");
+        if (text.startsWith("$")) div.classList.add("command");
+        if (text.includes("expectations.txt")) div.style.color = "#58a6ff";
+        if (text.includes("Kahveden")) div.classList.add("highlight");
 
         terminal.appendChild(div);
 
         let charIndex = 0;
-
         const interval = setInterval(() => {
           if (charIndex < text.length) {
-            div.textContent += text.charAt(charIndex);
-
-            charIndex++;
+            div.textContent += text.charAt(charIndex++);
           } else {
             clearInterval(interval);
-
             callback();
           }
         }, 25);
@@ -478,45 +419,27 @@
         function nextDeployLine() {
           if (deployIndex >= deployLines.length) {
             const progress = document.createElement("div");
-
             progress.className = "progress";
-
             progress.innerHTML = '<div class="progress-bar"></div>';
-
             terminal.appendChild(progress);
 
             const bar = progress.querySelector(".progress-bar");
-
             let width = 0;
-
             const interval = setInterval(() => {
-              width += 2;
-
-              bar.style.width = width + "%";
-
+              bar.style.width = (width += 2) + "%";
               if (width >= 100) {
                 clearInterval(interval);
-
                 const success = document.createElement("div");
-
                 success.className = "line success";
-
                 success.textContent = "✔ Deploy successful";
-
                 terminal.appendChild(success);
-
                 setTimeout(callback, 1200);
               }
             }, 30);
-
             return;
           }
 
-          typeLine(deployLines[deployIndex], () => {
-            deployIndex++;
-
-            nextDeployLine();
-          });
+          typeLine(deployLines[deployIndex++], nextDeployLine);
         }
 
         nextDeployLine();
@@ -526,65 +449,39 @@
         if (lineIndex >= lines.length) {
           playDeploy(() => {
             document.querySelector(".footer").style.opacity = "1";
-
-            setTimeout(() => {
-              showFinalCard();
-            }, 1500);
+            setTimeout(showFinalCard, 1500);
           });
-
           return;
         }
 
-        typeLine(lines[lineIndex], () => {
-          lineIndex++;
-
-          setTimeout(nextLine, 180);
-        });
+        typeLine(lines[lineIndex++], () => setTimeout(nextLine, 180));
       }
 
       setTimeout(nextLine, 500);
-      let isPlaying = false;
+
       function showFinalCard() {
         const card = document.createElement("div");
-
         card.className = "final-card";
-
         card.innerHTML = `
-    <div class="emoji">☕</div>
-
-    <p>
-      KAHVEDEN HATIR,<br>
-      HER İNSANDAN HAYIR BEKLENMEZ.
-    </p>
-
-    <h1>Hayırlı Cumalar 🤲</h1>
-
-    <button id="playMusic" class="music-btn">
-        🎵 Müziği Başlat
-    </button>
-
-    <a class="github-credit"
-       href="https://github.com/ilknrgzll"
-       target="_blank">
-       Developed by @ilknrgzll
-    </a>
-`;
-
+          <div class="emoji">☕</div>
+          <p>KAHVEDEN HATIR,<br>HER İNSANDAN HAYIR BEKLENMEZ.</p>
+          <h1>Hayırlı Cumalar 🤲</h1>
+          <button id="playMusic" class="music-btn">🎵 Müziği Başlat</button>
+          <a class="github-credit" href="https://github.com/ilknrgzll" target="_blank">
+            Developed by @ilknrgzll
+          </a>
+        `;
         document.body.appendChild(card);
 
         document.getElementById("playMusic").addEventListener("click", () => {
-          const audio = document.getElementById("bgMusic");
-
-          audio.play();
-
+          document.getElementById("bgMusic").play();
           const btn = document.getElementById("playMusic");
-
           btn.innerHTML = "🎵 Çalıyor...";
-
           btn.disabled = true;
         });
       }
     </script>
+
     <audio id="bgMusic" loop>
       <source src="geylani.mp3" type="audio/mpeg" />
     </audio>
